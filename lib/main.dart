@@ -1,4 +1,4 @@
-import 'package:daki/falling_game.dart';
+import 'package:daki/falling/falling_game.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(DakiApp());

@@ -1,4 +1,4 @@
-import 'package:daki/falling_game_provider.dart';
+import 'package:daki/falling/falling_game_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +11,6 @@ class FallingElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FallingGameProvider>(
       builder: (context, provider, child) {
-        child ??= provider.fallingItem;
         return Positioned(
           top: provider.fallingModels[position].y,
           left: provider.fallingModels[position].x,
@@ -20,7 +19,8 @@ class FallingElement extends StatelessWidget {
               onTap: () {
                 killIt(provider);
               },
-              child: provider.getImage(position),
+              child: provider.getImage(
+                  position, provider.fallingModels[position].positionOfImage),
             ),
           ),
         );
