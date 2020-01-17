@@ -1,4 +1,4 @@
-import 'package:daki/falling/falling_game_provider.dart';
+import 'package:daki/falling/falling_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class FallingElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<FallingGameProvider>(
+    return Consumer<FallingProvider>(
       builder: (context, provider, child) {
         return Positioned(
           top: provider.fallingModels[position].y,
@@ -28,7 +28,7 @@ class FallingElement extends StatelessWidget {
     );
   }
 
-  void killIt(FallingGameProvider provider) {
+  void killIt(FallingProvider provider) {
     provider.killElement(position);
   }
 }

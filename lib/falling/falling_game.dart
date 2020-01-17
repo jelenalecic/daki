@@ -1,10 +1,11 @@
-import 'dart:async';
-
+import 'package:daki/dialogs.dart';
 import 'package:daki/falling/falling_element.dart';
-import 'package:daki/falling/falling_game_provider.dart';
-import 'package:daki/transparent_slide_in_dialog_route.dart';
+import 'package:daki/falling/falling_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+const int numberOfXChunks = 10;
+const int noOfElements = 500;
 
 class FallingGame extends StatefulWidget {
   @override
@@ -12,39 +13,26 @@ class FallingGame extends StatefulWidget {
 }
 
 class _FallingGameState extends State<FallingGame> {
-  FallingGameProvider provider;
   List<Widget> fallingElements = <Widget>[];
-  int noOfElements = 500;
 
-  Timer timer;
-  double width;
-  double height;
-
-  @override
-  void initState() {
-    timer = Timer.periodic(
-        Duration(milliseconds: 64), (Timer t) => provider?.updateCoordinates());
-    super.initState();
-  }
+  double chunkWidth;
+  double screenHeight;
 
   @override
   Widget build(BuildContext context) {
-    width ??= MediaQuery.of(context).size.width / 10;
-    height ??= MediaQuery.of(context).size.height;
+    chunkWidth ??= MediaQuery.of(context).size.width / numberOfXChunks;
+    screenHeight ??= MediaQuery.of(context).size.height;
     return Container(
         color: Colors.pinkAccent,
-        child: ChangeNotifierProvider<FallingGameProvider>(
-            create: (_) {
-              provider = FallingGameProvider(
-                  width, height, noOfElements, gameFinished);
-              return provider;
-            },
+        child: ChangeNotifierProvider<FallingProvider>(
+            create: (_) => FallingProvider(
+                chunkWidth, screenHeight, noOfElements, gameFinished),
             child: Stack(
               children: <Widget>[
                 Stack(
-                  children: generateElements(noOfElements),
+                  children: generateUiElements(noOfElements),
                 ),
-                Consumer<FallingGameProvider>(
+                Consumer<FallingProvider>(
                   builder: (context, provider, child) {
                     return SafeArea(
                       child: Container(
@@ -65,17 +53,7 @@ class _FallingGameState extends State<FallingGame> {
             )));
   }
 
-  @override
-  void dispose() {
-    killTimer();
-    super.dispose();
-  }
-
-  void killTimer() {
-    timer.cancel();
-  }
-
-  List<FallingElement> generateElements(int noOfElements) {
+  List<FallingElement> generateUiElements(int noOfElements) {
     List<FallingElement> elements = [];
 
     for (int i = 0; i < noOfElements; i++) {
@@ -86,42 +64,6 @@ class _FallingGameState extends State<FallingGame> {
   }
 
   void gameFinished() {
-    killTimer();
-    showEndDialog();
-  }
-
-  void showEndDialog() {
-    Navigator.of(context).push(TransparentSlideInDialogRoute(Center(
-      child: Container(
-        height: 200,
-        width: 200,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You lost :(',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal),
-            ),
-            Container(
-              height: 20,
-            ),
-            RaisedButton(
-              color: Colors.pink,
-              padding: EdgeInsets.symmetric(
-                  horizontal: 20, vertical: 10),
-              child: Text('CLOSE',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            )
-          ],
-        ),
-      ),
-    )));
+    showEndDialog(context, 'You lost', 'CLOSE');
   }
 }

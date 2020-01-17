@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:daki/falling/falling_model.dart';
@@ -7,16 +8,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 const double elementSize = 80;
 const double yIncrement = 90.0;
+const int refreshRate = 64;
 
-class FallingGameProvider with ChangeNotifier {
-  FallingGameProvider(
-      this.width, this.height, this.noOfElements, this.endGame) {
+class FallingProvider with ChangeNotifier {
+  FallingProvider(this.width, this.height, this.noOfElements, this.endGame) {
     mills.add(DateTime.now().millisecondsSinceEpoch);
     mills.add(DateTime.now().millisecondsSinceEpoch ~/ 9);
     mills.add(DateTime.now().millisecondsSinceEpoch ~/ 5);
     mills.add(DateTime.now().millisecondsSinceEpoch ~/ 2);
 
     initialCreation();
+
+    timer = Timer.periodic(
+        Duration(milliseconds: refreshRate), (Timer t) => updateCoordinates());
   }
 
   void initialCreation() {
@@ -26,6 +30,7 @@ class FallingGameProvider with ChangeNotifier {
     }
   }
 
+  Timer timer;
   int yMovement = 3;
   List<int> mills = [];
 
@@ -108,6 +113,7 @@ class FallingGameProvider with ChangeNotifier {
       model.updateY(yMovement);
 
       if (!model.isDead && model.y >= height - elementSize) {
+        killTimer();
         endGame();
         isFinished = true;
         break;
@@ -173,5 +179,15 @@ class FallingGameProvider with ChangeNotifier {
       return 16;
     }
     return 17;
+  }
+
+  void killTimer() {
+    timer.cancel();
+  }
+
+  @override
+  void dispose() {
+    killTimer();
+    super.dispose();
   }
 }
