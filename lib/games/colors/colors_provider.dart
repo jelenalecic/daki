@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:daki/colors/color_model.dart';
+import 'package:daki/games/colors/color_model.dart';
 import 'package:flutter/material.dart';
 
 const int noOfCircles = 9;

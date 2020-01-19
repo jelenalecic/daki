@@ -1,4 +1,4 @@
-import 'package:daki/falling/falling_provider.dart';
+import 'package:daki/games/falling/falling_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

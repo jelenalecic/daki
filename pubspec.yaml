@@ -37,3 +37,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+  fonts:
+    - family: Freckles
+      fonts:
+        - asset: fonts/FreckleFace-Regular.ttf
+          weight: 400
+

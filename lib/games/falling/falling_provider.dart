@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:daki/falling/falling_model.dart';
+import 'package:daki/games/falling/falling_model.dart';
 import 'package:daki/pulse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
