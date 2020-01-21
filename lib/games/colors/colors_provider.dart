@@ -12,7 +12,7 @@ const int timeRunOut = -1;
 
 class ColorsProvider with ChangeNotifier {
   ColorsProvider(this.width, this.height, this.endGame) {
-    size = width / 4;
+    size = width / 5;
     timeLeftInLevel = maxTimePerLevel;
     random = Random();
     background = Colors.white;
@@ -94,7 +94,7 @@ class ColorsProvider with ChangeNotifier {
     terminateStream();
     terminateTimer();
 
-    endGame();
+    endGame(points);
   }
 
   @override

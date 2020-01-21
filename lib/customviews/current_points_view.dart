@@ -14,13 +14,27 @@ class CurrentPointView extends StatelessWidget {
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(top: 20),
-        child: Text(
-          '$points',
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.none),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '$points',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none),
+            ),
+            if (maxPoints != null)
+              Text(
+                ' /$maxPoints',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    decoration: TextDecoration.none),
+              )
+          ],
         ),
         alignment: Alignment.topCenter,
       ),

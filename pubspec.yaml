@@ -14,7 +14,7 @@ description: Daki&#x27;s fav game
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,6 +22,7 @@ dependencies:
 
   flutter_svg: ^0.15.0
   provider: ^4.0.1
+  path_provider: ^1.5.1
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +38,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/bugs/
 
   fonts:
     - family: Freckles

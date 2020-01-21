@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 const int numberOfXChunks = 10;
-const int noOfElements = 500;
+const int noOfElements = 200;
 
 class FallingGame extends StatefulWidget {
   @override
@@ -40,7 +40,11 @@ class _FallingGameState extends State<FallingGame> {
                   ),
                   Consumer<FallingProvider>(
                     builder: (context, provider, child) {
-                      return CurrentPointView(provider.points, Colors.black);
+                      return CurrentPointView(
+                        provider.points,
+                        Colors.black,
+                        maxPoints: noOfElements,
+                      );
                     },
                   )
                 ],

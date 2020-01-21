@@ -3,6 +3,7 @@ import 'package:daki/dialogs.dart';
 import 'package:daki/games/colors/color_element.dart';
 import 'package:daki/games/colors/color_model.dart';
 import 'package:daki/games/colors/colors_provider.dart';
+import 'package:daki/storage/app_persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,14 +72,17 @@ class _ColorsGameState extends State<ColorsGame> {
                           child: GridView.count(
                             crossAxisSpacing: 0,
                             mainAxisSpacing: 0,
-                            padding: EdgeInsets.all(0),
+                            padding: EdgeInsets.all(20),
                             crossAxisCount: 3,
                             children: generateUiElements(provider),
                           ),
                         )
                       ],
                     ),
-                    CurrentPointView(provider.points, Colors.black)
+                    CurrentPointView(
+                      provider.points,
+                      Colors.black,
+                    )
                   ],
                 ),
               );
@@ -101,7 +105,14 @@ class _ColorsGameState extends State<ColorsGame> {
     return elements;
   }
 
-  void onEndGame() {
-    showEndDialog(context, 'You lost', 'CLOSE');
+  void onEndGame(int result) {
+    if (Provider.of<AppPersistentDataProvider>(context, listen: false)
+        .isBestResult('colors', result)) {
+      Provider.of<AppPersistentDataProvider>(context, listen: false)
+          .addNewBestResult('colors', result, 'JeLeNa');
+      Navigator.pop(context);
+    } else {
+      showEndDialog(context, 'You lost', 'CLOSE');
+    }
   }
 }

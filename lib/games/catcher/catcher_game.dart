@@ -1,18 +1,19 @@
 import 'package:daki/customviews/current_points_view.dart';
 import 'package:daki/dialogs.dart';
-import 'package:daki/games/surround/surround_falling_element.dart';
-import 'package:daki/games/surround/surround_provider.dart';
+import 'package:daki/games/catcher/catcher_falling_element.dart';
+import 'package:daki/games/catcher/catcher_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-const int noOfElements = 500;
+const int noOfElements = 200;
 
-class SurroundGame extends StatefulWidget {
+class CatcherGame extends StatefulWidget {
   @override
   _SurroundGameState createState() => _SurroundGameState();
 }
 
-class _SurroundGameState extends State<SurroundGame> {
+class _SurroundGameState extends State<CatcherGame> {
   double screenWidth;
   double heightBelowAppBar;
 
@@ -30,9 +31,9 @@ class _SurroundGameState extends State<SurroundGame> {
         heightBelowAppBar ??= MediaQuery.of(context).size.height - 100;
         return Container(
           color: Colors.white,
-          child: ChangeNotifierProvider<SurroundProvider>(
-              create: (_) => SurroundProvider(screenWidth, heightBelowAppBar,
-                  screenWidth / 10, noOfElements, gameFinished),
+          child: ChangeNotifierProvider<CatcherProvider>(
+              create: (_) => CatcherProvider(screenWidth, heightBelowAppBar,
+                  screenWidth / 11, noOfElements, gameFinished),
               child: Stack(
                 children: <Widget>[
                   Stack(
@@ -41,20 +42,21 @@ class _SurroundGameState extends State<SurroundGame> {
                   Stack(
                     children: <Widget>[
                       //add other elements that are consumers
-                      Consumer<SurroundProvider>(
+                      Consumer<CatcherProvider>(
                         builder: (context, provider, child) {
                           return Positioned(
                               top: provider?.surroundCircleY,
                               left: provider?.surroundCircleX,
                               child: Container(
+                                width: provider?.surroundCircleSize,
+                                height: provider?.surroundCircleSize,
+                                child: SvgPicture.asset(
+                                  'assets/images/net3.svg',
+                                  fit: BoxFit.cover,
                                   width: provider?.surroundCircleSize,
                                   height: provider?.surroundCircleSize,
-                                  decoration: BoxDecoration(
-                                      color: Colors.yellow.withOpacity(0.2),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.yellow
-                                              .withOpacity(0.9)))));
+                                ),
+                              ));
                         },
                       )
                     ],
@@ -62,15 +64,19 @@ class _SurroundGameState extends State<SurroundGame> {
                   Builder(
                     builder: (BuildContext builderContext) => GestureDetector(
                       onPanUpdate: (DragUpdateDetails details) {
-                        Provider.of<SurroundProvider>(builderContext,
+                        Provider.of<CatcherProvider>(builderContext,
                                 listen: false)
                             .updateCatcher(details.delta.dx, details.delta.dy);
                       },
                     ),
                   ),
-                  Consumer<SurroundProvider>(
+                  Consumer<CatcherProvider>(
                     builder: (context, provider, child) {
-                      return CurrentPointView(provider.points, Colors.black);
+                      return CurrentPointView(
+                        provider.points,
+                        Colors.black,
+                        maxPoints: noOfElements,
+                      );
                     },
                   )
                 ],
@@ -81,10 +87,10 @@ class _SurroundGameState extends State<SurroundGame> {
   }
 
   List<Widget> generateUiElements(int noOfElements) {
-    List<SurroundFallingElement> elements = [];
+    List<CatcherFallingElement> elements = [];
 
     for (int i = 0; i < noOfElements; i++) {
-      elements.add(SurroundFallingElement(i));
+      elements.add(CatcherFallingElement(i));
     }
 
     return elements;

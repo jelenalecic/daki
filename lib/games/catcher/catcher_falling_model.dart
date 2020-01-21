@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SurroundFallingModel {
-  SurroundFallingModel(this.x, this.y, this.size);
+class CatcherFallingModel {
+  CatcherFallingModel(this.x, this.y, this.size, this.positionOfImage);
 
   final double x;
   double y;
-  double size;
+  final double size;
+
+  var positionOfImage;
 
   Rect rect;
 

@@ -14,15 +14,21 @@ class ColorElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.center,
-        child: GestureDetector(
-          onTap: () {
-            onPress(color);
-          },
-          child: Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-        ));
+      alignment: Alignment.center,
+      child: Container(
+          width: width,
+          height: height,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+                customBorder: CircleBorder(),
+                splashColor: Colors.black,
+//                splashColor: Colors.black,
+                onTap: () {
+                  onPress(color);
+                }),
+          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+    );
   }
 }

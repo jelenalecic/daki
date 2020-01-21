@@ -14,7 +14,7 @@ void showEndDialog(BuildContext context, String text, String buttonText) {
         children: <Widget>[
           Text(
             text,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
           ),
           Container(
             height: 20,
