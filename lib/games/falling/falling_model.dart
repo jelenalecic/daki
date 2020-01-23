@@ -8,7 +8,7 @@ class FallingModel {
 
   bool isDead = false;
 
-  void updateY(int yMovement) {
+  void updateY(double yMovement) {
     y += yMovement;
   }
 }

@@ -1,7 +1,9 @@
+import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/falling/falling_element.dart';
 import 'package:daki/games/falling/falling_provider.dart';
+import 'package:daki/storage/app_persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,12 +31,21 @@ class _FallingGameState extends State<FallingGame> {
             style: TextStyle(fontFamily: 'Freckles', fontSize: 30)),
       ),
       body: Container(
-          color: Colors.pinkAccent,
+          color: Colors.white,
           child: ChangeNotifierProvider<FallingProvider>(
               create: (_) => FallingProvider(
                   chunkWidth, heightBelowAppBar, noOfElements, gameFinished),
               child: Stack(
                 children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: BestResult(
+                          Provider.of<AppPersistentDataProvider>(context)
+                              .getMaxForGame('falling')),
+                    ),
+                  ),
                   Stack(
                     children: generateUiElements(noOfElements),
                   ),
@@ -62,7 +73,12 @@ class _FallingGameState extends State<FallingGame> {
     return elements;
   }
 
-  void gameFinished() {
-    showEndDialog(context, 'You lost', 'CLOSE');
+  void gameFinished(int result) {
+    if (Provider.of<AppPersistentDataProvider>(context, listen: false)
+        .isBestResult('falling', result)) {
+      showCongratulationsDialog(context, result, 'falling');
+    } else {
+      showEndDialog(context, 'You lost', 'CLOSE');
+    }
   }
 }

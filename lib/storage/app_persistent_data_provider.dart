@@ -51,12 +51,17 @@ class AppPersistentDataProvider with ChangeNotifier {
     listOfRecords ??= Records();
     listOfRecords.records ??= [];
 
+    if (newResult == 0) {
+      return false;
+    }
+
     if (listOfRecords.records.isEmpty) {
       return true;
     }
 
-    GameRecord record = listOfRecords.records
-        .firstWhere((GameRecord temp) => temp.gameName == gameName);
+    GameRecord record = listOfRecords.records.firstWhere(
+        (GameRecord temp) => temp.gameName == gameName,
+        orElse: () => null);
 
     if (record != null) {
       if (record.maxPoints <= newResult) {
@@ -76,10 +81,30 @@ class AppPersistentDataProvider with ChangeNotifier {
 
     if (record != null) {
       record.maxPoints = noOfPoints;
+      record.personName = personName;
     } else {
       listOfRecords.records.add(GameRecord(
           gameName: gameName, maxPoints: noOfPoints, personName: personName));
     }
     updateStorageRecords();
+  }
+
+  GameRecord getMaxForGame(String gameName) {
+    listOfRecords ??= Records();
+    listOfRecords.records ??= [];
+
+    if (listOfRecords.records.isEmpty) {
+      return null;
+    }
+
+    GameRecord record = listOfRecords.records.firstWhere(
+        (GameRecord temp) => temp.gameName == gameName,
+        orElse: () => null);
+
+    if (record != null) {
+      return record;
+    } else {
+      return null;
+    }
   }
 }

@@ -1,7 +1,9 @@
+import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/catcher/catcher_falling_element.dart';
 import 'package:daki/games/catcher/catcher_provider.dart';
+import 'package:daki/storage/app_persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -32,55 +34,65 @@ class _SurroundGameState extends State<CatcherGame> {
         return Container(
           color: Colors.white,
           child: ChangeNotifierProvider<CatcherProvider>(
-              create: (_) => CatcherProvider(screenWidth, heightBelowAppBar,
-                  screenWidth / 11, noOfElements, gameFinished),
-              child: Stack(
-                children: <Widget>[
-                  Stack(
-                    children: generateUiElements(noOfElements),
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      //add other elements that are consumers
-                      Consumer<CatcherProvider>(
-                        builder: (context, provider, child) {
-                          return Positioned(
-                              top: provider?.surroundCircleY,
-                              left: provider?.surroundCircleX,
-                              child: Container(
+            create: (_) => CatcherProvider(screenWidth, heightBelowAppBar,
+                screenWidth / 11, noOfElements, gameFinished),
+            child: Stack(
+              children: <Widget>[
+                Stack(
+                  children: generateUiElements(noOfElements),
+                ),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: BestResult(
+                            Provider.of<AppPersistentDataProvider>(context)
+                                .getMaxForGame('catcher')),
+                      ),
+                    ),
+                    //add other elements that are consumers
+                    Consumer<CatcherProvider>(
+                      builder: (context, provider, child) {
+                        return Positioned(
+                            top: provider?.surroundCircleY,
+                            left: provider?.surroundCircleX,
+                            child: Container(
+                              width: provider?.surroundCircleSize,
+                              height: provider?.surroundCircleSize,
+                              child: SvgPicture.asset(
+                                'assets/images/net3.svg',
+                                fit: BoxFit.cover,
                                 width: provider?.surroundCircleSize,
                                 height: provider?.surroundCircleSize,
-                                child: SvgPicture.asset(
-                                  'assets/images/net3.svg',
-                                  fit: BoxFit.cover,
-                                  width: provider?.surroundCircleSize,
-                                  height: provider?.surroundCircleSize,
-                                ),
-                              ));
-                        },
-                      )
-                    ],
-                  ),
-                  Builder(
-                    builder: (BuildContext builderContext) => GestureDetector(
-                      onPanUpdate: (DragUpdateDetails details) {
-                        Provider.of<CatcherProvider>(builderContext,
-                                listen: false)
-                            .updateCatcher(details.delta.dx, details.delta.dy);
+                              ),
+                            ));
                       },
-                    ),
-                  ),
-                  Consumer<CatcherProvider>(
-                    builder: (context, provider, child) {
-                      return CurrentPointView(
-                        provider.points,
-                        Colors.black,
-                        maxPoints: noOfElements,
-                      );
+                    )
+                  ],
+                ),
+                Builder(
+                  builder: (BuildContext builderContext) => GestureDetector(
+                    onPanUpdate: (DragUpdateDetails details) {
+                      Provider.of<CatcherProvider>(builderContext,
+                              listen: false)
+                          .updateCatcher(details.delta.dx, details.delta.dy);
                     },
-                  )
-                ],
-              )),
+                  ),
+                ),
+                Consumer<CatcherProvider>(
+                  builder: (context, provider, child) {
+                    return CurrentPointView(
+                      provider.points,
+                      Colors.black,
+                      maxPoints: noOfElements,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         );
       }),
     );
@@ -96,7 +108,12 @@ class _SurroundGameState extends State<CatcherGame> {
     return elements;
   }
 
-  void gameFinished() {
-    showEndDialog(context, 'You lost', 'CLOSE');
+  void gameFinished(int result) {
+    if (Provider.of<AppPersistentDataProvider>(context, listen: false)
+        .isBestResult('catcher', result)) {
+      showCongratulationsDialog(context, result, 'catcher');
+    } else {
+      showEndDialog(context, 'You lost', 'CLOSE');
+    }
   }
 }

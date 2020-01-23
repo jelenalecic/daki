@@ -1,3 +1,4 @@
+import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/colors/color_element.dart';
@@ -38,33 +39,36 @@ class _ColorsGameState extends State<ColorsGame> {
                 color: provider.background,
                 child: Stack(
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Wrap(
                       children: <Widget>[
-                        Container(
-                            height: bigCircleSize,
-                            width: bigCircleSize,
-                            margin: EdgeInsets.only(top: 10),
-                            child: StreamBuilder<int>(
-                              stream: provider.ticker.stream,
-                              builder: (context, snapshot) => Center(
-                                child: snapshot.data != null
-                                    ? Text('${snapshot.data}',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 45,
-                                            decoration: TextDecoration.none,
-                                            fontWeight: FontWeight.bold))
-                                    : Container(),
+                        CurrentPointView(
+                          provider.points,
+                          Colors.black,
+                        ),
+                        Center(
+                          child: Container(
+                              height: bigCircleSize,
+                              width: bigCircleSize,
+                              child: StreamBuilder<int>(
+                                stream: provider.ticker.stream,
+                                builder: (context, snapshot) => Center(
+                                  child: snapshot.data != null
+                                      ? Text('${snapshot.data}',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 45,
+                                              decoration: TextDecoration.none,
+                                              fontWeight: FontWeight.bold))
+                                      : Container(),
+                                ),
                               ),
-                            ),
-                            decoration: BoxDecoration(
-                              color: provider.bigCircleColor,
-                              shape: BoxShape.circle,
-                            )),
+                              decoration: BoxDecoration(
+                                color: provider.bigCircleColor,
+                                shape: BoxShape.circle,
+                              )),
+                        ),
                         Container(
-                          height: 40,
+                          height: 20,
                         ),
                         Container(
                           width: screenWidth,
@@ -79,9 +83,14 @@ class _ColorsGameState extends State<ColorsGame> {
                         )
                       ],
                     ),
-                    CurrentPointView(
-                      provider.points,
-                      Colors.black,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: BestResult(
+                            Provider.of<AppPersistentDataProvider>(context)
+                                .getMaxForGame('colors')),
+                      ),
                     )
                   ],
                 ),
@@ -108,9 +117,7 @@ class _ColorsGameState extends State<ColorsGame> {
   void onEndGame(int result) {
     if (Provider.of<AppPersistentDataProvider>(context, listen: false)
         .isBestResult('colors', result)) {
-      Provider.of<AppPersistentDataProvider>(context, listen: false)
-          .addNewBestResult('colors', result, 'JeLeNa');
-      Navigator.pop(context);
+      showCongratulationsDialog(context, result, 'colors');
     } else {
       showEndDialog(context, 'You lost', 'CLOSE');
     }

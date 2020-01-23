@@ -19,12 +19,12 @@ class DakiApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
                     brightness: Brightness.light,
-                    primaryColor: Colors.pink[800],
+                    primaryColor: Colors.black,
                     fontFamily: 'Freckles'),
                 home: Stack(
                   children: <Widget>[
                     Container(
-                      color: Colors.pink,
+                      color: Colors.black,
                     ),
                     Container(
                       width: double.infinity,

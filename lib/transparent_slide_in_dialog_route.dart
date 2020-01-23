@@ -35,8 +35,9 @@ class TransparentSlideInDialogRoute<T> extends PageRoute<T> {
     // This makes sure that text and other content follows the material style
     return Material(
       type: MaterialType.transparency,
-      child: Container(
-        child: _buildOverlayContent(context),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _buildOverlayContent(context),
       ),
     );
   }

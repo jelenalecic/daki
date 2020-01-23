@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 const double elementSize = 80;
-const double yIncrement = 90.0;
-const int refreshRate = 64;
+const double verticalSpaceBetweenItems = 90.0;
+const int refreshRate = 16;
+
+const double minYMovement = 0.6;
+const double yMovementIncrement = 0.15;
 
 class FallingProvider with ChangeNotifier {
   FallingProvider(this.width, this.height, this.noOfElements, this.endGame) {
@@ -25,13 +28,13 @@ class FallingProvider with ChangeNotifier {
 
   void initialCreation() {
     for (int i = 0; i < noOfElements; i++) {
-      fallingModels.add(FallingModel(
-          getRandomX(i), -i * yIncrement, random.nextInt(fallingItems.length)));
+      fallingModels.add(FallingModel(getRandomX(i),
+          -i * verticalSpaceBetweenItems, random.nextInt(fallingItems.length)));
     }
   }
 
   Timer timer;
-  int yMovement = 3;
+  double yMovement = 3;
   List<int> mills = [];
 
   Random random = Random();
@@ -42,63 +45,75 @@ class FallingProvider with ChangeNotifier {
   Function endGame;
   bool isFinished = false;
 
-  int levelIncrement = 5;
+  int minIncrement = 2;
 
   List<Widget> fallingItems = [
     SvgPicture.asset(
-      'assets/images/dino.svg',
+      'assets/images/dinos/dino.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino3.svg',
+      'assets/images/dinos/dino1.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino4.svg',
+      'assets/images/dinos/dino2.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino5.svg',
+      'assets/images/dinos/dino3.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino7.svg',
+      'assets/images/dinos/dino4.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino8.svg',
+      'assets/images/dinos/dino5.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino9.svg',
+      'assets/images/dinos/dino6.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino10.svg',
+      'assets/images/dinos/dino7.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
     ),
     SvgPicture.asset(
-      'assets/images/dino11.svg',
+      'assets/images/dinos/dino8.svg',
       fit: BoxFit.cover,
       width: elementSize,
       height: elementSize,
-    )
+    ),
+    SvgPicture.asset(
+      'assets/images/dinos/dino9.svg',
+      fit: BoxFit.cover,
+      width: elementSize,
+      height: elementSize,
+    ),
+    SvgPicture.asset(
+      'assets/images/dinos/dino10.svg',
+      fit: BoxFit.cover,
+      width: elementSize,
+      height: elementSize,
+    ),
   ];
 
   Widget pulse = Pulse(elementSize);
@@ -114,7 +129,7 @@ class FallingProvider with ChangeNotifier {
 
       if (!model.isDead && model.y >= height - elementSize) {
         killTimer();
-        endGame();
+        endGame(points);
         isFinished = true;
         break;
       }
@@ -150,35 +165,8 @@ class FallingProvider with ChangeNotifier {
         : fallingItems[positionOfImage];
   }
 
-  int getMovement() {
-    if (points < levelIncrement) {
-      return 4;
-    } else if (points < levelIncrement * 2) {
-      return 5;
-    } else if (points < levelIncrement * 3) {
-      return 6;
-    } else if (points < levelIncrement * 4) {
-      return 7;
-    } else if (points < levelIncrement * 5) {
-      return 8;
-    } else if (points < levelIncrement * 6) {
-      return 9;
-    } else if (points < levelIncrement * 7) {
-      return 10;
-    } else if (points < levelIncrement * 8) {
-      return 11;
-    } else if (points < levelIncrement * 9) {
-      return 12;
-    } else if (points < levelIncrement * 10) {
-      return 13;
-    } else if (points < levelIncrement * 11) {
-      return 14;
-    } else if (points < levelIncrement * 12) {
-      return 15;
-    } else if (points < levelIncrement * 13) {
-      return 16;
-    }
-    return 17;
+  double getMovement() {
+    return (points / 5) * yMovementIncrement + minYMovement;
   }
 
   void killTimer() {
