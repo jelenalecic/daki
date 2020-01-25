@@ -4,10 +4,9 @@ import 'dart:math';
 import 'package:daki/games/falling/falling_model.dart';
 import 'package:daki/pulse.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-const double elementSize = 80;
-const double verticalSpaceBetweenItems = 90.0;
+const double elementSize = 60;
+const double verticalSpaceBetweenItems = 110.0;
 const int refreshRate = 16;
 
 const double minYMovement = 0.6;
@@ -23,8 +22,10 @@ class FallingProvider with ChangeNotifier {
 
   void initialCreation() {
     for (int i = 0; i < noOfElements; i++) {
-      fallingModels.add(FallingModel(getRandomX(i),
-          -i * verticalSpaceBetweenItems, random.nextInt(fallingItems.length)));
+      fallingModels.add(FallingModel(
+          getRandomX(i),
+          -i * verticalSpaceBetweenItems,
+          (random.nextInt(50) + 50).toDouble()));
     }
   }
 
@@ -39,75 +40,6 @@ class FallingProvider with ChangeNotifier {
   Function endGame;
   bool isFinished = false;
 
-  List<Widget> fallingItems = [
-    SvgPicture.asset(
-      'assets/images/dinos/dino.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino1.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino2.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino3.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino4.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino5.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino6.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino7.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino8.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino9.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-    SvgPicture.asset(
-      'assets/images/dinos/dino10.svg',
-      fit: BoxFit.cover,
-      width: elementSize,
-      height: elementSize,
-    ),
-  ];
-
   Widget pulse = Pulse(elementSize);
 
   int points = 0;
@@ -115,6 +47,9 @@ class FallingProvider with ChangeNotifier {
   List<FallingModel> fallingModels = <FallingModel>[];
 
   void updateCoordinates() {
+    if (isFinished) {
+      return;
+    }
     itemsYMovementPerRefresh = getMovement();
     for (FallingModel model in fallingModels) {
       model.updateY(itemsYMovementPerRefresh);
@@ -128,7 +63,9 @@ class FallingProvider with ChangeNotifier {
     }
 
     if (points == noOfElements) {
+      killTimer();
       endGame(points, true);
+      isFinished = true;
     }
     notifyListeners();
   }
@@ -146,13 +83,18 @@ class FallingProvider with ChangeNotifier {
   }
 
   double getRandomX(int position) {
-    return width * (random.nextInt(8));
+    return width * (random.nextInt(7) + 1);
   }
 
-  Widget getImage(int position, int positionOfImage) {
+  Widget getImage(int position) {
     return fallingModels[position].isDead
         ? pulse
-        : fallingItems[positionOfImage];
+        : Container(
+            height: fallingModels[position].size,
+            width: fallingModels[position].size,
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.deepPurple),
+          );
   }
 
   double getMovement() {

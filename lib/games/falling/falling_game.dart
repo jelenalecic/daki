@@ -1,5 +1,6 @@
 import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
+import 'package:daki/customviews/game_title.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/falling/falling_element.dart';
 import 'package:daki/games/falling/falling_provider.dart';
@@ -27,8 +28,7 @@ class _FallingGameState extends State<FallingGame> {
     heightBelowAppBar ??= MediaQuery.of(context).size.height - 100;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Falling',
-            style: TextStyle(fontFamily: 'Freckles', fontSize: 30)),
+        title: GameTitle('Falling'),
       ),
       body: Container(
           color: Colors.white,

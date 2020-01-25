@@ -27,12 +27,12 @@ class DakiApp extends StatelessWidget {
                   Container(
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                    image: AssetImage("assets/images/pinky.jpg"),
+                    image: AssetImage("assets/images/pixls.png"),
                     fit: BoxFit.cover,
                   ))),
                   Container(
                     width: double.infinity,
-//            color: Colors.blue.withOpacity(0.5),
+                    color: Colors.black.withOpacity(0.1),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,12 +61,11 @@ class DakiApp extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      margin: EdgeInsets.only(
-                          bottom: 40),
+                      margin: EdgeInsets.only(bottom: 40),
                       child: Text(
                         'JayDee',
                         style: TextStyle(
-                          letterSpacing: 3,
+                            letterSpacing: 1,
                             fontSize: 20,
                             color: Colors.white,
                             decoration: TextDecoration.none,

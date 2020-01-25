@@ -19,8 +19,7 @@ class FallingElement extends StatelessWidget {
               onTap: () {
                 killIt(provider);
               },
-              child: provider.getImage(
-                  position, provider.fallingModels[position].positionOfImage),
+              child: provider.getImage(position),
             ),
           ),
         );

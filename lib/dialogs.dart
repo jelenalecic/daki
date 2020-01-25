@@ -38,7 +38,8 @@ void showEndDialog(BuildContext context, String text, String buttonText) {
   )));
 }
 
-void showCongratulationsDialog(BuildContext context, int points, String game, bool hasWon) {
+void showCongratulationsDialog(
+    BuildContext context, int points, String game, bool hasWon) {
   final inputController = TextEditingController();
   Navigator.of(context).push(TransparentSlideInDialogRoute(
     Center(
@@ -73,8 +74,7 @@ void showCongratulationsDialog(BuildContext context, int points, String game, bo
             Container(
               margin: EdgeInsets.symmetric(vertical: 25),
               child: Text(
-                hasWon?'You have won!':
-                "You've set a new record!",
+                hasWon ? 'You have won!' : "You've set a new record!",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
               ),

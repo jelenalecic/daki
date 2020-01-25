@@ -1,5 +1,6 @@
 import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
+import 'package:daki/customviews/game_title.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/catcher/catcher_falling_element.dart';
 import 'package:daki/games/catcher/catcher_provider.dart';
@@ -24,10 +25,7 @@ class _SurroundGameState extends State<CatcherGame> {
     screenWidth ??= MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Catcher',
-          style: TextStyle(fontFamily: 'Freckles', fontSize: 30),
-        ),
+        title: GameTitle('Catcher'),
       ),
       body: Builder(builder: (BuildContext underAppBarContext) {
         heightBelowAppBar ??= MediaQuery.of(context).size.height - 100;

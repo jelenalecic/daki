@@ -1,5 +1,6 @@
 import 'package:daki/customviews/best_result_view.dart';
 import 'package:daki/customviews/current_points_view.dart';
+import 'package:daki/customviews/game_title.dart';
 import 'package:daki/dialogs.dart';
 import 'package:daki/games/colors/color_element.dart';
 import 'package:daki/games/colors/color_model.dart';
@@ -28,10 +29,7 @@ class _ColorsGameState extends State<ColorsGame> {
     bigCircleSize ??= screenHeight / 6;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Colors',
-          style: TextStyle(fontFamily: 'Freckles', fontSize: 30),
-        ),
+        title: GameTitle('Colors'),
       ),
       body: ChangeNotifierProvider<ColorsProvider>(
           create: (_) => ColorsProvider(
@@ -42,11 +40,13 @@ class _ColorsGameState extends State<ColorsGame> {
                 color: provider.background,
                 child: Stack(
                   children: <Widget>[
+                    getBackground(provider),
                     Wrap(
                       children: <Widget>[
                         CurrentPointView(
                           provider.points,
                           Colors.black,
+                          maxPoints: noOfElements,
                         ),
                         Center(
                           child: Container(
@@ -124,5 +124,29 @@ class _ColorsGameState extends State<ColorsGame> {
     } else {
       showEndDialog(context, 'You lost', 'CLOSE');
     }
+  }
+
+  Widget getBackground(ColorsProvider provider) {
+    if (provider.points < noOfElements / 4) {
+      return Container();
+    } else if (provider.points < noOfElements / 2) {
+      return getGradientContainer(Colors.pink, Colors.yellow);
+    } else if (provider.points < noOfElements * 2 / 3) {
+      return getGradientContainer(Colors.black, Colors.white);
+    } else {
+      return Container(color: Colors.black);
+    }
+  }
+
+  Widget getGradientContainer(Color color1, Color color2) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: <Color>[color1, color2],
+        ),
+      ),
+    );
   }
 }

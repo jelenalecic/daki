@@ -9,6 +9,25 @@ class CurrentPointView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Shadow> shadows = [
+      Shadow(
+          // bottomLeft
+          offset: Offset(-1.5, -1.5),
+          color: Colors.white),
+      Shadow(
+          // bottomRight
+          offset: Offset(1.5, -1.5),
+          color: Colors.white),
+      Shadow(
+          // topRight
+          offset: Offset(1.5, 1.5),
+          color: Colors.white),
+      Shadow(
+          // topLeft
+          offset: Offset(-1.5, 1.5),
+          color: Colors.white),
+    ];
+
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(top: 20),
@@ -24,15 +43,17 @@ class CurrentPointView extends StatelessWidget {
                   '$points',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 40,
+                      fontSize: 50,
+                      shadows: shadows,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none),
                 ),
                 if (maxPoints != null)
                   Text(
-                    ' /$maxPoints',
+                    ' / $maxPoints',
                     style: TextStyle(
                         color: Colors.black,
+                        shadows: shadows,
                         fontSize: 20,
                         decoration: TextDecoration.none),
                   ),

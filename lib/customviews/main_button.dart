@@ -13,7 +13,7 @@ class MainButton extends StatelessWidget {
         text.toUpperCase(),
         style: TextStyle(
             letterSpacing: 4,
-            color: Colors.pinkAccent,
+            color: Colors.white,
             fontSize: 30,
             fontWeight: FontWeight.bold),
       ),
@@ -24,7 +24,7 @@ class MainButton extends StatelessWidget {
           side: BorderSide(width: 5, color: Colors.white),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       color: Colors.black,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
     );
   }
 }

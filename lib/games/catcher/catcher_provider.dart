@@ -134,6 +134,9 @@ class CatcherProvider with ChangeNotifier {
   ///moves items down the screen, checks if some item is left the screen
   ///not killed
   void updateItems() {
+    if (isFinished) {
+      return;
+    }
     itemsYMovementPerRefresh = getMovementForLevel();
 
     for (CatcherFallingModel model in fallingModels) {
@@ -162,7 +165,9 @@ class CatcherProvider with ChangeNotifier {
     }
 
     if (points == noOfElements) {
+      timer.cancel();
       finishedTheGame(points, true);
+      isFinished = true;
     }
 
     notifyListeners();

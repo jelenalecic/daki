@@ -9,7 +9,7 @@ class PulsePainter extends CustomPainter {
 
   void circle(Canvas canvas, Rect rect, double value) {
     double opacity = (1.0 - (value / 4.0)).clamp(0.0, 1.0);
-    Color color = Colors.pink[800].withOpacity(opacity);
+    Color color = Colors.grey[200].withOpacity(opacity);
 
     double size = rect.width / 2;
     double area = size * size;

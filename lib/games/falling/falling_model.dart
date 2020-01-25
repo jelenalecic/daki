@@ -1,10 +1,10 @@
 class FallingModel {
-  FallingModel(this.x, this.y, this.positionOfImage);
+  FallingModel(this.x, this.y, this.size);
 
   double x;
   double y;
 
-  int positionOfImage;
+  double size;
 
   bool isDead = false;
 

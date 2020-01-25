@@ -39,7 +39,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/bugs/
-    - assets/images/dinos/
 
   fonts:
     - family: Freckles
