@@ -6,17 +6,19 @@ import 'package:flutter/material.dart';
 
 const int noOfCircles = 9;
 const int baseColor = 0xff000000;
-const int whiteColor = 0xffffff;
+const int white = 0xffffffff;
+const int nonTransparentWhite = 0x00ffffff;
 const int maxTimePerLevel = 5;
 const int timeRunOut = -1;
+const int colorMax = 255;
 
 class ColorsProvider with ChangeNotifier {
-  ColorsProvider(this.width, this.height, this.endGame) {
+  ColorsProvider(this.width, this.height, this.noOfElements, this.endGame) {
     size = width / 5;
     timeLeftInLevel = maxTimePerLevel;
     random = Random();
     background = Colors.white;
-    bigCircleColor = generateMainColor();
+    bigCircleColor = generateRandomColor();
     ticker = StreamController();
 
     generateCircles();
@@ -36,6 +38,7 @@ class ColorsProvider with ChangeNotifier {
   List<ColorModel> colorModels = [];
   Color currentColor;
   int points = 0;
+  int noOfElements;
 
   void initiateTimer() {
     timer = Timer.periodic(
@@ -47,15 +50,22 @@ class ColorsProvider with ChangeNotifier {
     generateCircles();
     timeLeftInLevel = maxTimePerLevel;
     ticker.add(null);
+
+    if (points == noOfElements) {
+      finishGame(true);
+    }
+
     notifyListeners();
   }
 
   void generateCircles() {
     colorModels.clear();
-    bigCircleColor = generateMainColor();
+    bigCircleColor = generateRandomColor();
     for (int i = 0; i < noOfCircles - 1; i++) {
-      colorModels
-          .add(ColorModel(generateMainColor(endColor: whiteColor), size, size));
+      colorModels.add(ColorModel(
+          generateSimilarColor(bigCircleColor, getSimilarityFactor()),
+          size,
+          size));
     }
     colorModels.add(ColorModel(bigCircleColor, size, size));
     colorModels.shuffle();
@@ -63,15 +73,32 @@ class ColorsProvider with ChangeNotifier {
 
   void timeIntervalTrigger() {
     if (timeLeftInLevel == timeRunOut) {
-      gameLost();
+      finishGame(false);
       return;
     }
     ticker.add(timeLeftInLevel);
     --timeLeftInLevel;
   }
 
-  Color generateMainColor({int endColor = whiteColor}) {
-    return Color(baseColor + random.nextInt(endColor));
+  Color generateRandomColor() {
+    return Color(baseColor + random.nextInt(nonTransparentWhite));
+  }
+
+  Color generateSimilarColor(Color bigCircleColor, double similarityFactor) {
+    int red =
+        ((bigCircleColor.red + random.nextInt(colorMax) * similarityFactor))
+                .toInt() %
+            colorMax;
+    int green =
+        ((bigCircleColor.green + random.nextInt(colorMax) * similarityFactor))
+                .toInt() %
+            colorMax;
+    int blue =
+        ((bigCircleColor.blue + random.nextInt(colorMax) * similarityFactor))
+                .toInt() %
+            colorMax;
+
+    return Color.fromARGB(colorMax, red, green, blue);
   }
 
   void terminateStream() {
@@ -86,15 +113,15 @@ class ColorsProvider with ChangeNotifier {
     if (color == bigCircleColor) {
       startNextLevel();
     } else {
-      gameLost();
+      finishGame(false);
     }
   }
 
-  void gameLost() {
+  void finishGame(bool hasWon) {
     terminateStream();
     terminateTimer();
 
-    endGame(points, false);
+    endGame(points, hasWon);
   }
 
   @override
@@ -102,5 +129,10 @@ class ColorsProvider with ChangeNotifier {
     terminateStream();
     terminateTimer();
     super.dispose();
+  }
+
+  ///0 is most similar
+  double getSimilarityFactor() {
+    return (noOfElements - points) / noOfElements;
   }
 }

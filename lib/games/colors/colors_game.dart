@@ -8,6 +8,8 @@ import 'package:daki/storage/app_persistent_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+const int noOfElements = 100;
+
 class ColorsGame extends StatefulWidget {
   @override
   _ColorsGameState createState() => _ColorsGameState();
@@ -32,7 +34,8 @@ class _ColorsGameState extends State<ColorsGame> {
         ),
       ),
       body: ChangeNotifierProvider<ColorsProvider>(
-          create: (_) => ColorsProvider(screenWidth, screenHeight, onEndGame),
+          create: (_) => ColorsProvider(
+              screenWidth, screenHeight, noOfElements, onEndGame),
           child: Consumer<ColorsProvider>(
             builder: (context, provider, child) {
               return Container(
