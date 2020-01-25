@@ -15,11 +15,6 @@ const double yMovementIncrement = 0.15;
 
 class FallingProvider with ChangeNotifier {
   FallingProvider(this.width, this.height, this.noOfElements, this.endGame) {
-    mills.add(DateTime.now().millisecondsSinceEpoch);
-    mills.add(DateTime.now().millisecondsSinceEpoch ~/ 9);
-    mills.add(DateTime.now().millisecondsSinceEpoch ~/ 5);
-    mills.add(DateTime.now().millisecondsSinceEpoch ~/ 2);
-
     initialCreation();
 
     timer = Timer.periodic(
@@ -34,8 +29,7 @@ class FallingProvider with ChangeNotifier {
   }
 
   Timer timer;
-  double yMovement = 3;
-  List<int> mills = [];
+  double itemsYMovementPerRefresh;
 
   Random random = Random();
 
@@ -44,8 +38,6 @@ class FallingProvider with ChangeNotifier {
   int noOfElements;
   Function endGame;
   bool isFinished = false;
-
-  int minIncrement = 2;
 
   List<Widget> fallingItems = [
     SvgPicture.asset(
@@ -123,16 +115,20 @@ class FallingProvider with ChangeNotifier {
   List<FallingModel> fallingModels = <FallingModel>[];
 
   void updateCoordinates() {
-    yMovement = getMovement();
+    itemsYMovementPerRefresh = getMovement();
     for (FallingModel model in fallingModels) {
-      model.updateY(yMovement);
+      model.updateY(itemsYMovementPerRefresh);
 
       if (!model.isDead && model.y >= height - elementSize) {
         killTimer();
-        endGame(points);
+        endGame(points, false);
         isFinished = true;
         break;
       }
+    }
+
+    if (points == noOfElements) {
+      endGame(points, true);
     }
     notifyListeners();
   }
@@ -151,12 +147,6 @@ class FallingProvider with ChangeNotifier {
 
   double getRandomX(int position) {
     return width * (random.nextInt(8));
-  }
-
-  int getRandomNumber(int position, int mod) {
-    int randomNumber = (mills[position % mills.length] * position) % mod + 1;
-
-    return randomNumber;
   }
 
   Widget getImage(int position, int positionOfImage) {

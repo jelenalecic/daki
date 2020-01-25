@@ -94,7 +94,7 @@ class ColorsProvider with ChangeNotifier {
     terminateStream();
     terminateTimer();
 
-    endGame(points);
+    endGame(points, false);
   }
 
   @override

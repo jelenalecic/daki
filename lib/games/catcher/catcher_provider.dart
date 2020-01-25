@@ -7,9 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 const double bugSize = 50;
 
-const double minCircleSize = 40;
-const double maXCircleSize = 200;
-const double yIncrement = 100.0;
+const double minNetSize = 40;
+const double maxNetSize = 200;
+
+const double itemsVerticalSpacing = 100.0;
+
 const double minYMovement = 0.6;
 const double yMovementIncrement = 0.15;
 
@@ -17,16 +19,19 @@ const int refreshRate = 16;
 
 class CatcherProvider with ChangeNotifier {
   CatcherProvider(this.screenWidth, this.screenHeight, this.chunkWidth,
-      this.noOfElements, this.endGame) {
-    surroundCircleY = screenHeight - maXCircleSize;
-    catcherRect = Rect.fromLTWH(surroundCircleX, surroundCircleY,
-        surroundCircleSize, surroundCircleSize);
+      this.noOfElements, this.finishedTheGame) {
+    netY = screenHeight - maxNetSize;
+    netX = screenWidth / 2;
+    netRect = Rect.fromLTWH(netX, netY, netSize, netSize);
     for (int i = 0; i < noOfElements; i++) {
-      fallingModels.add(CatcherFallingModel(getRandomX(i), -i * yIncrement,
-          bugSize, random.nextInt(fallingItems.length)));
+      fallingModels.add(CatcherFallingModel(
+          getRandomX(i),
+          -i * itemsVerticalSpacing,
+          bugSize,
+          random.nextInt(fallingItems.length)));
     }
     timer = Timer.periodic(
-        Duration(milliseconds: refreshRate), (Timer t) => updateCoordinates());
+        Duration(milliseconds: refreshRate), (Timer t) => updateItems());
   }
 
   List<Widget> fallingItems = [
@@ -76,74 +81,90 @@ class CatcherProvider with ChangeNotifier {
         fit: BoxFit.cover, width: bugSize, height: bugSize),
   ];
 
-  Timer timer;
-  double surroundCircleX = 200;
-  double surroundCircleY = 500;
-  double surroundCircleSize = minCircleSize;
-  double yMovement = 3;
   int noOfElements;
+
+  Timer timer;
+
+  double netX;
+  double netY;
+  double netSize = minNetSize;
+  Rect netRect;
+
+  double itemsYMovementPerRefresh;
+
   List<CatcherFallingModel> fallingModels = [];
   Random random = Random();
-  Rect catcherRect;
+
   int points = 0;
   bool isFinished = false;
 
   final double screenWidth;
   final double screenHeight;
   final double chunkWidth;
-  final Function endGame;
+
+  final Function finishedTheGame;
 
   double getRandomX(int position) {
     return chunkWidth * (random.nextInt(8) + 1);
   }
 
+  ///triggered from [GestureDetector]
+  ///changes appearance of the net
   void updateCatcher(double deltaX, double deltaY) {
-    surroundCircleX += deltaX;
-    surroundCircleSize += deltaY;
+    netX += deltaX;
+    netSize += deltaY;
 
-    if (surroundCircleX <= 0) {
-      surroundCircleX = 0;
-    } else if (surroundCircleX >= screenWidth - surroundCircleSize) {
-      surroundCircleX = screenWidth - surroundCircleSize;
+    //left and right borders
+    if (netX <= 0) {
+      netX = 0;
+    } else if (netX >= screenWidth - netSize) {
+      netX = screenWidth - netSize;
     }
 
-    if (surroundCircleSize < minCircleSize) {
-      surroundCircleSize = minCircleSize;
-    } else if (surroundCircleSize > maXCircleSize) {
-      surroundCircleSize = maXCircleSize;
+    if (netSize < minNetSize) {
+      netSize = minNetSize;
+    } else if (netSize > maxNetSize) {
+      netSize = maxNetSize;
     }
 
     notifyListeners();
   }
 
-  void updateCoordinates() {
-    yMovement = getMovementForLevel();
+  ///called from timer, on every [refreshRate]ms
+  ///moves items down the screen, checks if some item is left the screen
+  ///not killed
+  void updateItems() {
+    itemsYMovementPerRefresh = getMovementForLevel();
 
     for (CatcherFallingModel model in fallingModels) {
       if (model.isDead) {
         continue;
       }
 
-      model.updateY(yMovement);
+      model.updateY(itemsYMovementPerRefresh);
 
       if (!isFinished) {
-        if (model.checkIfInside(
-            surroundCircleX, surroundCircleY, surroundCircleSize)) {
-          surroundCircleX =
-              surroundCircleX + surroundCircleSize / 2 - minCircleSize / 2;
-          surroundCircleSize = minCircleSize;
+        if (model.checkIfInside(netX, netY, netSize)) {
+          netX = netX + netSize / 2 - minNetSize / 2;
+          netSize = minNetSize;
 
           ++points;
         }
       }
 
+      //if item was not killed, but is getting out of the screen
       if (!model.isDead && model.y >= screenHeight - model.size) {
         timer.cancel();
-        endGame(points);
+        finishedTheGame(points, false);
         isFinished = true;
         break;
       }
     }
+
+    if (points == noOfElements) {
+      finishedTheGame(points, true);
+    }
+
     notifyListeners();
   }
 
@@ -164,9 +185,6 @@ class CatcherProvider with ChangeNotifier {
   }
 
   Widget getDeadElement() {
-    return Container(
-      height: 1,
-      width: 1,
-    );
+    return Container();
   }
 }

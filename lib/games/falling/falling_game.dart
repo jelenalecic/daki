@@ -73,10 +73,10 @@ class _FallingGameState extends State<FallingGame> {
     return elements;
   }
 
-  void gameFinished(int result) {
+  void gameFinished(int result, bool hasWon) {
     if (Provider.of<AppPersistentDataProvider>(context, listen: false)
         .isBestResult('falling', result)) {
-      showCongratulationsDialog(context, result, 'falling');
+      showCongratulationsDialog(context, result, 'falling', hasWon);
     } else {
       showEndDialog(context, 'You lost', 'CLOSE');
     }

@@ -114,10 +114,10 @@ class _ColorsGameState extends State<ColorsGame> {
     return elements;
   }
 
-  void onEndGame(int result) {
+  void onEndGame(int result, bool hasWon) {
     if (Provider.of<AppPersistentDataProvider>(context, listen: false)
         .isBestResult('colors', result)) {
-      showCongratulationsDialog(context, result, 'colors');
+      showCongratulationsDialog(context, result, 'colors', hasWon);
     } else {
       showEndDialog(context, 'You lost', 'CLOSE');
     }

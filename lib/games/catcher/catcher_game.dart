@@ -56,16 +56,16 @@ class _SurroundGameState extends State<CatcherGame> {
                     Consumer<CatcherProvider>(
                       builder: (context, provider, child) {
                         return Positioned(
-                            top: provider?.surroundCircleY,
-                            left: provider?.surroundCircleX,
+                            top: provider?.netY,
+                            left: provider?.netX,
                             child: Container(
-                              width: provider?.surroundCircleSize,
-                              height: provider?.surroundCircleSize,
+                              width: provider?.netSize,
+                              height: provider?.netSize,
                               child: SvgPicture.asset(
                                 'assets/images/net3.svg',
                                 fit: BoxFit.cover,
-                                width: provider?.surroundCircleSize,
-                                height: provider?.surroundCircleSize,
+                                width: provider?.netSize,
+                                height: provider?.netSize,
                               ),
                             ));
                       },
@@ -108,10 +108,10 @@ class _SurroundGameState extends State<CatcherGame> {
     return elements;
   }
 
-  void gameFinished(int result) {
+  void gameFinished(int result, bool hasWon) {
     if (Provider.of<AppPersistentDataProvider>(context, listen: false)
         .isBestResult('catcher', result)) {
-      showCongratulationsDialog(context, result, 'catcher');
+      showCongratulationsDialog(context, result, 'catcher', hasWon);
     } else {
       showEndDialog(context, 'You lost', 'CLOSE');
     }
