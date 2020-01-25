@@ -3,6 +3,7 @@ import 'package:daki/games/catcher/catcher_game.dart';
 import 'package:daki/games/colors/colors_game.dart';
 import 'package:daki/games/falling/falling_game.dart';
 import 'package:daki/storage/app_persistent_data_provider.dart';
+import 'package:daki/turn_on_the_light.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,46 +17,66 @@ class DakiApp extends StatelessWidget {
         child: Consumer<AppPersistentDataProvider>(
           builder: (context, provider, child) {
             return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: ThemeData(
-                    brightness: Brightness.light,
-                    primaryColor: Colors.black,
-                    fontFamily: 'Freckles'),
-                home: Stack(
-                  children: <Widget>[
-                    Container(
-                      color: Colors.black,
-                    ),
-                    Container(
-                      width: double.infinity,
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                  brightness: Brightness.light,
+                  primaryColor: Colors.black,
+                  fontFamily: 'Freckles'),
+              home: Stack(
+                children: <Widget>[
+                  Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                    image: AssetImage("assets/images/pinky.jpg"),
+                    fit: BoxFit.cover,
+                  ))),
+                  Container(
+                    width: double.infinity,
 //            color: Colors.blue.withOpacity(0.5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Builder(
-                              builder: (context) => MainButton(() {
-                                    openFalling(context);
-                                  }, 'falling')),
-                          Container(
-                            height: 50,
-                          ),
-                          Builder(
-                              builder: (context) => MainButton(() {
-                                    openColors(context);
-                                  }, 'colors')),
-                          Container(
-                            height: 50,
-                          ),
-                          Builder(
-                              builder: (context) => MainButton(() {
-                                    openCatcher(context);
-                                  }, 'catcher'))
-                        ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Builder(
+                            builder: (context) => MainButton(() {
+                                  openFalling(context);
+                                }, 'falling')),
+                        Container(
+                          height: 50,
+                        ),
+                        Builder(
+                            builder: (context) => MainButton(() {
+                                  openColors(context);
+                                }, 'colors')),
+                        Container(
+                          height: 50,
+                        ),
+                        Builder(
+                            builder: (context) => MainButton(() {
+                                  openCatcher(context);
+                                }, 'catcher')),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          bottom: 40),
+                      child: Text(
+                        'JayDee',
+                        style: TextStyle(
+                          letterSpacing: 3,
+                            fontSize: 20,
+                            color: Colors.white,
+                            decoration: TextDecoration.none,
+                            fontFamily: 'Lato'),
                       ),
-                    )
-                  ],
-                ));
+                    ),
+                  )
+                ],
+              ),
+            );
           },
         ));
   }
@@ -73,5 +94,10 @@ class DakiApp extends StatelessWidget {
   void openCatcher(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) => CatcherGame()));
+  }
+
+  void openLights(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => TurnOnTheLight()));
   }
 }

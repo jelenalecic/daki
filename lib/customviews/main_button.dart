@@ -12,6 +12,7 @@ class MainButton extends StatelessWidget {
       child: Text(
         text.toUpperCase(),
         style: TextStyle(
+            letterSpacing: 4,
             color: Colors.pinkAccent,
             fontSize: 30,
             fontWeight: FontWeight.bold),
@@ -20,9 +21,9 @@ class MainButton extends StatelessWidget {
         onTap();
       },
       shape: RoundedRectangleBorder(
-          side: BorderSide(width: 5, color: Colors.green),
+          side: BorderSide(width: 5, color: Colors.white),
           borderRadius: BorderRadius.all(Radius.circular(5))),
-      color: Colors.white,
+      color: Colors.black,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     );
   }

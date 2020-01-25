@@ -46,4 +46,8 @@ flutter:
       fonts:
         - asset: fonts/FreckleFace-Regular.ttf
           weight: 400
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Regular.ttf
+          weight: 400
 

@@ -133,6 +133,6 @@ class ColorsProvider with ChangeNotifier {
 
   ///0 is most similar
   double getSimilarityFactor() {
-    return (noOfElements - points) / noOfElements;
+    return (noOfElements - points) / noOfElements + 0.15;
   }
 }
