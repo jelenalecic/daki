@@ -124,7 +124,7 @@ class _ColorsGameState extends State<ColorsGame> {
         .isBestResult('colors', result)) {
       showCongratulationsDialog(context, result, 'colors', hasWon);
     } else {
-      showEndDialog(context, 'CLOSE');
+      showEndDialog(context);
     }
   }
 

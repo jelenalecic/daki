@@ -19,13 +19,16 @@ class BestResult extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 15),
                 child: Text(
                   '${record.maxPoints}',
-                  style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(top: 35),
+                width: 160,
                 child: Text(
                   '${record.personName}',
+                  textAlign: TextAlign.center,
+                  overflow:TextOverflow.ellipsis,
                   style: TextStyle(
                       fontSize: 22, color: Colors.grey[600]),
                 ),

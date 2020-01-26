@@ -8,6 +8,7 @@ class FallingModel {
   int positionInColors;
 
   bool isBomb;
+  bool isExploded = false;
 
   bool isDead = false;
 

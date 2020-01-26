@@ -27,7 +27,7 @@ class DakiApp extends StatelessWidget {
                   Container(
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                    image: AssetImage("assets/images/pixls.png"),
+                    image: AssetImage("assets/images/background.png"),
                     fit: BoxFit.cover,
                   ))),
                   Container(

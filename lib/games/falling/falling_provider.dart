@@ -23,7 +23,7 @@ class FallingProvider with ChangeNotifier {
 
   void initialCreation() {
     for (int i = 0; i < noOfElements; i++) {
-      bool isBomb = random.nextInt(3) == 2;
+      bool isBomb = random.nextInt(12) == 2;
       fallingModels.add(FallingModel(
           getRandomX(i),
           -i * verticalSpaceBetweenItems,
@@ -40,6 +40,9 @@ class FallingProvider with ChangeNotifier {
 
   Widget bomb = SvgPicture.asset('assets/images/bomb2.svg',
       fit: BoxFit.cover, width: 50, height: 50);
+
+  Widget flame = SvgPicture.asset('assets/images/flame.svg',
+      fit: BoxFit.cover, width: 100, height: 100);
 
   List<Color> colors = [
     Color(0xff6d0f56),
@@ -113,9 +116,13 @@ class FallingProvider with ChangeNotifier {
       return;
     }
     if (fallingModels[position].isBomb) {
+      fallingModels[position].isExploded = true;
       killTimer();
-      endGame(points, false);
       isFinished = true;
+
+      Future.delayed(Duration(milliseconds: 300), () {
+        endGame(points, false);
+      });
     } else if (!fallingModels[position].isDead) {
       ++points;
       fallingModels[position].isDead = true;
@@ -129,17 +136,21 @@ class FallingProvider with ChangeNotifier {
   }
 
   Widget getImage(int position) {
-    return fallingModels[position].isDead
-        ? pulse
-        : fallingModels[position].isBomb
-            ? bomb
-            : Container(
-                height: fallingModels[position].size,
-                width: fallingModels[position].size,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colors[fallingModels[position].positionInColors]),
-              );
+    if (fallingModels[position].isExploded) {
+      return flame;
+    } else if (fallingModels[position].isDead) {
+      return pulse;
+    } else if (fallingModels[position].isBomb) {
+      return bomb;
+    }
+
+    return Container(
+      height: fallingModels[position].size,
+      width: fallingModels[position].size,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: colors[fallingModels[position].positionInColors]),
+    );
   }
 
   double getMovement() {

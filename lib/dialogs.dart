@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-void showEndDialog(BuildContext context, String buttonText) {
+void showEndDialog(BuildContext context) {
   Navigator.of(context).push(TransparentSlideInDialogRoute(Center(
     child: Container(
       width: 200,
-      height: 200,
+      height: 180,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -16,7 +16,7 @@ void showEndDialog(BuildContext context, String buttonText) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'You lost :(',
+            'Try again :(',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
           ),
           Container(
@@ -25,7 +25,7 @@ void showEndDialog(BuildContext context, String buttonText) {
           RaisedButton(
             color: Colors.pink,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(buttonText,
+            child: Text('OK',
                 style: TextStyle(fontSize: 20, color: Colors.white)),
             onPressed: () {
               Navigator.pop(context);
@@ -76,7 +76,7 @@ void showCongratulationsDialog(
               child: Text(
                 hasWon ? 'You have won!' : "You've set a new record!",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
               ),
             ),
             Container(
