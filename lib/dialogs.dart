@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-void showEndDialog(BuildContext context, String text, String buttonText) {
+void showEndDialog(BuildContext context, String buttonText) {
   Navigator.of(context).push(TransparentSlideInDialogRoute(Center(
     child: Container(
       width: 200,
@@ -16,7 +16,7 @@ void showEndDialog(BuildContext context, String text, String buttonText) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            text,
+            'You lost :(',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
           ),
           Container(

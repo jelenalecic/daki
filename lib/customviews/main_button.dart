@@ -24,6 +24,8 @@ class MainButton extends StatelessWidget {
           side: BorderSide(width: 5, color: Colors.white),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       color: Colors.black,
+      colorBrightness: Brightness.dark,
+      highlightColor: Colors.pink,
       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
     );
   }

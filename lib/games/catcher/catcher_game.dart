@@ -111,7 +111,7 @@ class _SurroundGameState extends State<CatcherGame> {
         .isBestResult('catcher', result)) {
       showCongratulationsDialog(context, result, 'catcher', hasWon);
     } else {
-      showEndDialog(context, 'You lost', 'CLOSE');
+      showEndDialog(context, 'CLOSE');
     }
   }
 }

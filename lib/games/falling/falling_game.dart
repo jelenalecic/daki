@@ -78,7 +78,7 @@ class _FallingGameState extends State<FallingGame> {
         .isBestResult('falling', result)) {
       showCongratulationsDialog(context, result, 'falling', hasWon);
     } else {
-      showEndDialog(context, 'You lost', 'CLOSE');
+      showEndDialog(context, 'CLOSE');
     }
   }
 }

@@ -66,7 +66,7 @@ class DakiApp extends StatelessWidget {
                         'JayDee',
                         style: TextStyle(
                             letterSpacing: 1,
-                            fontSize: 20,
+                            fontSize: 15,
                             color: Colors.white,
                             decoration: TextDecoration.none,
                             fontFamily: 'Lato'),

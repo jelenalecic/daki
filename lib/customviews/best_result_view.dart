@@ -10,20 +10,25 @@ class BestResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return record != null
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        ? Stack(
+            alignment: Alignment.center,
             children: <Widget>[
-              Text(
-                '${record.personName}',
-                style: TextStyle(
-                    fontSize: 20, color: Colors.grey[500]),
-              ),
               SvgPicture.asset('assets/images/reward.svg',
-                  fit: BoxFit.cover, width: 30, height: 30),
-              Text(
-                '${record.maxPoints}',
-                style: TextStyle(
-                    fontSize: 20, color: Colors.grey[500]),
+                  fit: BoxFit.cover, width: 70, height: 70),
+              Container(
+                margin: EdgeInsets.only(bottom: 15),
+                child: Text(
+                  '${record.maxPoints}',
+                  style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 35),
+                child: Text(
+                  '${record.personName}',
+                  style: TextStyle(
+                      fontSize: 22, color: Colors.grey[600]),
+                ),
               )
             ],
           )

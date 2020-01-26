@@ -26,7 +26,7 @@ class _ColorsGameState extends State<ColorsGame> {
   Widget build(BuildContext context) {
     screenHeight ??= MediaQuery.of(context).size.height;
     screenWidth ??= MediaQuery.of(context).size.width;
-    bigCircleSize ??= screenHeight / 6;
+    bigCircleSize ??= screenHeight / 7;
     return Scaffold(
       appBar: AppBar(
         title: GameTitle('Colors'),
@@ -42,6 +42,7 @@ class _ColorsGameState extends State<ColorsGame> {
                   children: <Widget>[
                     getBackground(provider),
                     Wrap(
+                      alignment: WrapAlignment.center,
                       children: <Widget>[
                         CurrentPointView(
                           provider.points,
@@ -50,6 +51,7 @@ class _ColorsGameState extends State<ColorsGame> {
                         ),
                         Center(
                           child: Container(
+                              margin: EdgeInsets.only(top: 20),
                               height: bigCircleSize,
                               width: bigCircleSize,
                               child: StreamBuilder<int>(
@@ -59,7 +61,7 @@ class _ColorsGameState extends State<ColorsGame> {
                                       ? Text('${snapshot.data}',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 45,
+                                              fontSize: 35,
                                               decoration: TextDecoration.none,
                                               fontWeight: FontWeight.bold))
                                       : Container(),
@@ -74,8 +76,8 @@ class _ColorsGameState extends State<ColorsGame> {
                           height: 20,
                         ),
                         Container(
-                          width: screenWidth,
-                          height: screenWidth,
+                          width: screenWidth * 0.8,
+                          height: screenWidth * 0.8,
                           child: GridView.count(
                             crossAxisSpacing: 0,
                             mainAxisSpacing: 0,
@@ -122,7 +124,7 @@ class _ColorsGameState extends State<ColorsGame> {
         .isBestResult('colors', result)) {
       showCongratulationsDialog(context, result, 'colors', hasWon);
     } else {
-      showEndDialog(context, 'You lost', 'CLOSE');
+      showEndDialog(context, 'CLOSE');
     }
   }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:daki/games/falling/falling_model.dart';
 import 'package:daki/pulse.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 const double elementSize = 60;
 const double verticalSpaceBetweenItems = 110.0;
@@ -22,10 +23,13 @@ class FallingProvider with ChangeNotifier {
 
   void initialCreation() {
     for (int i = 0; i < noOfElements; i++) {
+      bool isBomb = random.nextInt(3) == 2;
       fallingModels.add(FallingModel(
           getRandomX(i),
           -i * verticalSpaceBetweenItems,
-          (random.nextInt(50) + 50).toDouble()));
+          (random.nextInt(50) + 50).toDouble(),
+          random.nextInt(colors.length),
+          isBomb));
     }
   }
 
@@ -33,6 +37,35 @@ class FallingProvider with ChangeNotifier {
   double itemsYMovementPerRefresh;
 
   Random random = Random();
+
+  Widget bomb = SvgPicture.asset('assets/images/bomb2.svg',
+      fit: BoxFit.cover, width: 50, height: 50);
+
+  List<Color> colors = [
+    Color(0xff6d0f56),
+    Color(0xffeb58ea),
+    Color(0xff280c1b),
+    Color(0xffbe24af),
+    Color(0xff9a8d98),
+    Color(0xffa91592),
+    Color(0xff0e0209),
+    Color(0xff751d6b),
+    Color(0xffde61d8),
+    Color(0xffef82f9),
+    Color(0xff72005f),
+    Color(0xff1e061b),
+    Color(0xff790367),
+    Color(0xffd14fce),
+    Color(0xffc207a1),
+    Color(0xffee7af6),
+    Color(0xff511d47),
+    Color(0xffdb49d7),
+    Color(0xff260017),
+    Color(0xffd143c7),
+    Color(0xffdabcd6),
+    Color(0xff7d3871),
+    Color(0xff841877),
+  ];
 
   double width;
   double height;
@@ -55,10 +88,15 @@ class FallingProvider with ChangeNotifier {
       model.updateY(itemsYMovementPerRefresh);
 
       if (!model.isDead && model.y >= height - elementSize) {
-        killTimer();
-        endGame(points, false);
-        isFinished = true;
-        break;
+        if (model.isBomb) {
+          model.isDead = true;
+          ++points;
+        } else {
+          killTimer();
+          endGame(points, false);
+          isFinished = true;
+          break;
+        }
       }
     }
 
@@ -74,7 +112,11 @@ class FallingProvider with ChangeNotifier {
     if (isFinished) {
       return;
     }
-    if (!fallingModels[position].isDead) {
+    if (fallingModels[position].isBomb) {
+      killTimer();
+      endGame(points, false);
+      isFinished = true;
+    } else if (!fallingModels[position].isDead) {
       ++points;
       fallingModels[position].isDead = true;
     }
@@ -89,12 +131,15 @@ class FallingProvider with ChangeNotifier {
   Widget getImage(int position) {
     return fallingModels[position].isDead
         ? pulse
-        : Container(
-            height: fallingModels[position].size,
-            width: fallingModels[position].size,
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.deepPurple),
-          );
+        : fallingModels[position].isBomb
+            ? bomb
+            : Container(
+                height: fallingModels[position].size,
+                width: fallingModels[position].size,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: colors[fallingModels[position].positionInColors]),
+              );
   }
 
   double getMovement() {

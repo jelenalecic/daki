@@ -12,25 +12,25 @@ class CurrentPointView extends StatelessWidget {
     List<Shadow> shadows = [
       Shadow(
           // bottomLeft
-          offset: Offset(-1.5, -1.5),
+          offset: Offset(-0.5, -0.5),
           color: Colors.white),
       Shadow(
           // bottomRight
-          offset: Offset(1.5, -1.5),
+          offset: Offset(0.5, -0.5),
           color: Colors.white),
       Shadow(
           // topRight
-          offset: Offset(1.5, 1.5),
+          offset: Offset(0.5, 0.5),
           color: Colors.white),
       Shadow(
           // topLeft
-          offset: Offset(-1.5, 1.5),
+          offset: Offset(-0.5, 0.5),
           color: Colors.white),
     ];
 
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
