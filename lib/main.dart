@@ -3,11 +3,20 @@ import 'package:daki/games/catcher/catcher_game.dart';
 import 'package:daki/games/colors/colors_game.dart';
 import 'package:daki/games/falling/falling_game.dart';
 import 'package:daki/storage/app_persistent_data_provider.dart';
-import 'package:daki/turn_on_the_light.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(DakiApp());
+void main() => runApp(getDakiApp());
+
+Widget getDakiApp() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  return DakiApp();
+}
 
 class DakiApp extends StatelessWidget {
   @override
@@ -93,10 +102,5 @@ class DakiApp extends StatelessWidget {
   void openCatcher(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) => CatcherGame()));
-  }
-
-  void openLights(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => TurnOnTheLight()));
   }
 }

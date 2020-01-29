@@ -44,7 +44,7 @@ void showCongratulationsDialog(
   Navigator.of(context).push(TransparentSlideInDialogRoute(
     Center(
       child: Container(
-        width: 350,
+        width:  300,
         height: 350,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
